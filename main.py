@@ -1,6 +1,8 @@
 from customtkinter import *
 import customtkinter as ct
-import mplsoccer as mp
+from mplsoccer import *
+from mplsoccer.pitch import Pitch
+import matplotlib.pyplot as plt
 import pandas as pd
 from tkinter import filedialog
 
@@ -14,14 +16,54 @@ Heavitas = ct.CTkFont(family="heavitas", size=30)
 HeavitasSmall = ct.CTkFont(family="heavitas", size=12)
 
 filename = "No file uploaded"
+data = None
 
 def openFile():
-    global filename
+    global filename, data
     filename = filedialog.askopenfilename()
-    filenameText.configure(text=filename if filename else "No file uploaded")
+    if filename.endswith('.csv'):
+        data = pd.read_csv(filename)
+        filenameText.configure(text=filename if filename else "No file uploaded")
+    else:
+        filenameText.configure(text="Please upload a CSV file.")
 
 def graph():
-    pass
+    global data
+    if data is None:
+        filenameText.configure(text="Please upload a CSV file first.")
+        return
+
+    try:
+        data.columns = data.columns.str.strip().str.lower()
+
+        if 'x' not in data.columns or 'y' not in data.columns:
+            filenameText.configure(text="CSV must contain 'x' and 'y' columns for plotting.")
+            return
+
+        fig, ax = plt.subplots(figsize=(13, 8.5))
+        fig.set_facecolor('#22312b')
+        ax.patch.set_facecolor('#22312b')
+
+        pitch = Pitch(pitch_type='statsbomb', pitch_color='#22312b', line_color='#c7d5cc')
+        pitch.draw(ax=ax)
+
+        plt.gca().invert_yaxis()
+
+        x = data['x']
+        y = data['y']
+
+        x_normalized = (x - x.min()) / (x.max() - x.min()) * 120
+        y_normalized = (y - y.min()) / (y.max() - y.min()) * 80
+
+        plt.scatter(x_normalized, y_normalized, s=100, c='#ea6969', alpha=.7)
+
+        ax.set_xlim([0, 120])
+        ax.set_ylim([0, 80])
+
+        plt.show()
+
+    except Exception as e:
+        filenameText.configure(text=f"Error generating graph: {e}")
 
 title = ct.CTkLabel(app, text="Soccer Pass Chart Generator", font=Heavitas, fg_color="transparent")
 title.pack(pady=(30, 10))
@@ -32,10 +74,10 @@ instructionsText.pack(pady=(10, 10))
 filenameText = ct.CTkLabel(app, text=filename, font=Arial, fg_color="transparent")
 filenameText.pack(pady=(10, 10))
 
-openFileBtn = ct.CTkButton(app, text="Open file", width=200, height=50, command=openFile)
+openFileBtn = ct.CTkButton(app, text="Open file", width=200, height=50, command=openFile, fg_color="#e47c7c", hover_color="#d96b6b")
 openFileBtn.pack(pady=(10, 20))
 
-graphBtn = ct.CTkButton(app, text="Graph", width=200, height=50, command=graph)
+graphBtn = ct.CTkButton(app, text="Graph", width=200, height=50, command=graph, fg_color="#e47c7c", hover_color="#d96b6b")
 graphBtn.pack(pady=(10, 20))
 
 app.mainloop()
