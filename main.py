@@ -10,9 +10,13 @@ app.title("Soccer Pass Chart Generator")
 app.geometry("700x500")
 ct.set_appearance_mode("dark")
 
-Arial = ct.CTkFont(family="Arial", size=30)
+Arial = ct.CTkFont(family="Arial", size=10)
 Heavitas = ct.CTkFont(family="heavitas", size=30)
-HeavitasSmall = ct.CTkFont(family="heavitas", size=15)
+HeavitasSmall = ct.CTkFont(family="heavitas", size=12)
+
+
+def openFile():
+    pass
 
 app.grid_columnconfigure(0, weight=1)
 app.grid_rowconfigure(0, weight=1)
@@ -22,5 +26,10 @@ title.pack()
 
 instructionsText = ct.CTkLabel(app, text="Click the button below to open a .csv file of your data", fg_color="transparent", font=HeavitasSmall)
 instructionsText.pack()
+
+openFileBtn = ct.CTkButton(app, text="Open file", width=80, height=50, command=openFile)
+openFileBtn.pack()
+
+
 
 app.mainloop()
