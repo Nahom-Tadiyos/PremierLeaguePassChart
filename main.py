@@ -20,16 +20,22 @@ def openFile():
     filename = filedialog.askopenfilename()
     filenameText.configure(text=filename if filename else "No file uploaded")
 
+def graph():
+    pass
+
 title = ct.CTkLabel(app, text="Soccer Pass Chart Generator", font=Heavitas, fg_color="transparent")
 title.pack(pady=(30, 10))
 
 instructionsText = ct.CTkLabel(app, text="Click the button below to open a .csv file of your data", font=HeavitasSmall, fg_color="transparent")
 instructionsText.pack(pady=(10, 10))
 
-openFileBtn = ct.CTkButton(app, text="Open file", width=200, height=50, command=openFile)
-openFileBtn.pack(pady=(10, 10))
-
 filenameText = ct.CTkLabel(app, text=filename, font=Arial, fg_color="transparent")
-filenameText.pack(pady=(10, 20))
+filenameText.pack(pady=(10, 10))
+
+openFileBtn = ct.CTkButton(app, text="Open file", width=200, height=50, command=openFile)
+openFileBtn.pack(pady=(10, 20))
+
+graphBtn = ct.CTkButton(app, text="Graph", width=200, height=50, command=graph)
+graphBtn.pack(pady=(10, 20))
 
 app.mainloop()
