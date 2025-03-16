@@ -5,6 +5,9 @@ from mplsoccer.pitch import Pitch
 import matplotlib.pyplot as plt
 import pandas as pd
 from tkinter import filedialog
+from PIL import Image
+from io import BytesIO
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 app = ct.CTk()
 app.title("Soccer Pass Chart Generator")
@@ -16,6 +19,7 @@ Heavitas = ct.CTkFont(family="heavitas", size=30)
 HeavitasSmall = ct.CTkFont(family="heavitas", size=12)
 
 filename = "No file uploaded"
+insert = None
 data = None
 
 def openFile():
@@ -28,7 +32,8 @@ def openFile():
         filenameText.configure(text="Please upload a CSV file.")
 
 def graph():
-    global data
+    global data, insert
+
     if data is None:
         filenameText.configure(text="Please upload a CSV file first.")
         return
@@ -60,15 +65,31 @@ def graph():
         ax.set_xlim([0, 120])
         ax.set_ylim([0, 80])
 
+        canvas = FigureCanvasAgg(fig)
+        buf = BytesIO()
+        canvas.print_png(buf)
+        buf.seek(0)
+        insert = Image.open(buf)
+
         plt.show()
 
     except Exception as e:
         filenameText.configure(text=f"Error generating graph: {e}")
-        
 
 def saveImage():
-    pass
+    global insert
 
+    if insert is None:
+        filenameText.configure(text="No graph to save. Generate a graph first.")
+        return
+
+    filename = filedialog.asksaveasfilename(
+        defaultextension=".png",
+        filetypes=[("PNG file", "*.png")],
+        title="Choose filename",
+    )
+    if filename:
+        insert.save(filename)
 
 title = ct.CTkLabel(app, text="Soccer Pass Chart Generator", font=Heavitas, fg_color="transparent")
 title.pack(pady=(30, 10))
@@ -85,6 +106,7 @@ openFileBtn.pack(pady=(10, 20))
 graphBtn = ct.CTkButton(app, text="Graph", width=200, height=50, command=graph, fg_color="#e47c7c", hover_color="#d96b6b")
 graphBtn.pack(pady=(10, 20))
 
-saveImgBtn = ct.CTkButton(app, text="Save as JPG", width=200, height=50, command=saveImage, fg_color="#e47c7c", hover_color="#d96b6b")
+saveImgBtn = ct.CTkButton(app, text="Save as PNG", width=200, height=50, command=saveImage, fg_color="#e47c7c", hover_color="#d96b6b")
+saveImgBtn.pack(pady=(10,20))
 
 app.mainloop()
