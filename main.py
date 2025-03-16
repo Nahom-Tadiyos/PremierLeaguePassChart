@@ -64,6 +64,11 @@ def graph():
 
     except Exception as e:
         filenameText.configure(text=f"Error generating graph: {e}")
+        
+
+def saveImage():
+    pass
+
 
 title = ct.CTkLabel(app, text="Soccer Pass Chart Generator", font=Heavitas, fg_color="transparent")
 title.pack(pady=(30, 10))
@@ -79,5 +84,7 @@ openFileBtn.pack(pady=(10, 20))
 
 graphBtn = ct.CTkButton(app, text="Graph", width=200, height=50, command=graph, fg_color="#e47c7c", hover_color="#d96b6b")
 graphBtn.pack(pady=(10, 20))
+
+saveImgBtn = ct.CTkButton(app, text="Save as JPG", width=200, height=50, command=saveImage, fg_color="#e47c7c", hover_color="#d96b6b")
 
 app.mainloop()
