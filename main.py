@@ -9,14 +9,17 @@ from PIL import Image
 from io import BytesIO
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
+
 app = ct.CTk()
 app.title("Soccer Pass Chart Generator")
 app.geometry("700x500")
+app.iconbitmap("logo.ico")
 ct.set_appearance_mode("dark")
 
 Arial = ct.CTkFont(family="Arial", size=10)
 Heavitas = ct.CTkFont(family="heavitas", size=30)
 HeavitasSmall = ct.CTkFont(family="heavitas", size=12)
+
 
 filename = "No file uploaded"
 insert = None
@@ -91,7 +94,7 @@ def saveImage():
     if filename:
         insert.save(filename)
 
-title = ct.CTkLabel(app, text="Soccer Pass Chart Generator", font=Heavitas, fg_color="transparent")
+title = ct.CTkLabel(app, text="Soccer Shot Chart Generator", font=Heavitas, fg_color="transparent")
 title.pack(pady=(30, 10))
 
 instructionsText = ct.CTkLabel(app, text="Click the button below to open a .csv file of your data", font=HeavitasSmall, fg_color="transparent")
