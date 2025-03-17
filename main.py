@@ -13,7 +13,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 app = ct.CTk()
 app.title("Soccer Pass Chart Generator")
 app.geometry("700x500")
-app.iconbitmap("logo.ico")
+app.iconbitmap("images.ico")
 ct.set_appearance_mode("dark")
 
 Arial = ct.CTkFont(family="Arial", size=10)
